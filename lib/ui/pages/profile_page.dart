@@ -59,6 +59,13 @@ class _ProfilePageState extends State<ProfilePage> {
       followerCount = snapshot.docs.length;
     });
   }
+  // getFollowers() async {
+  //   QuerySnapshot snapshot =
+  //       await followersRef.doc(widget.id).collection('post').get();
+  //   setState(() {
+  //     followerCount = snapshot.docs.length;
+  //   });
+  // }
 
   getFollowing() async {
     QuerySnapshot snapshot =
@@ -182,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
-          "Uploaded Audio",
+          "Uploaded Project",
           style: AppTheme.blackTextStyle.copyWith(
             fontWeight: AppTheme.bold,
             fontSize: 18,

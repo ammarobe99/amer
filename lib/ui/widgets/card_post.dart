@@ -116,7 +116,7 @@ class _CardPostState extends State<CardPost> {
           ),
           const SizedBox(height: 12),
           Text(
-            widget.post.name,
+            "Financing type: Home financing",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: AppTheme.whiteTextStyle.copyWith(
@@ -126,7 +126,7 @@ class _CardPostState extends State<CardPost> {
           ),
           const SizedBox(height: 2),
           Text(
-            "",
+            "Loction : Irbid",
             style: AppTheme.whiteTextStyle.copyWith(
               color: AppColors.whiteColor,
               fontSize: 12,
@@ -220,19 +220,19 @@ class _CardPostState extends State<CardPost> {
                   ),
                 ),
                 _buildItemPublisher(context),
-                Row(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Row(
-                        children: [
-                          SizedBox(width: 15),
-                          WaveformScreen(assetPath: widget.outputpath),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Align(
+                //       alignment: Alignment.bottomLeft,
+                //       child: Row(
+                //         children: [
+                //           SizedBox(width: 15),
+                //           WaveformScreen(assetPath: widget.outputpath),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           );

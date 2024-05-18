@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 1000,
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 200),
-                                    child: Text("No Posts",
+                                    child: Text("No Project",
                                         style: TextStyle(
                                           fontSize: 28,
                                         )),
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Image.asset(
-              'assets/images/gramophone.png',
+              'assets/images/business-and-finance.png',
               width: 30,
               height: 30,
             ),

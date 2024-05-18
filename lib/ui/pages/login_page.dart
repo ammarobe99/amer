@@ -42,21 +42,36 @@ class LoginScreen extends StatelessWidget {
     return null;
   }
 
-  Future<String?>? _signupUser(SignupData data) async {
-    debugPrint('Signup Name: ${data.name}, Password: ${data.password}');
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: data.name!, password: data.password!);
+  Future<String?> _signupUser(SignupData data) async {
+    try {
+      // Create user with email and password
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: data.name!,
+        password: data.password!,
+      );
 
-    await _firestore
-        .collection('users')
-        .doc(_firebaseAuth.currentUser!.uid)
-        .set({
-      "email": data.name!,
-      "password": data.password!,
-      "id": _firebaseAuth.currentUser!.uid
-    });
+      // Get current user
+      User? user = userCredential.user;
+      if (user == null) {
+        return 'User creation failed';
+      }
 
-    return null;
+      // Add user details to Firestore
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        "email": data.name!,
+        "id": user.uid,
+      });
+
+      debugPrint('Signup successful: ${data.name}');
+      return null;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('FirebaseAuthException: ${e.message}');
+      return e.message;
+    } catch (e) {
+      debugPrint('Exception: ${e.toString()}');
+      return 'An unexpected error occurred';
+    }
   }
 
   Future<String?> _recoverPassword(String name) {
@@ -80,8 +95,8 @@ class LoginScreen extends StatelessWidget {
           fontSize: 35,
         ),
       ),
-      title: 'Gramophone',
-      logo: 'assets/images/gramophone.png',
+      title: 'Finance company',
+      logo: 'assets/images/business-and-finance.png',
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {

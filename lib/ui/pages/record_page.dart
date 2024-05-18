@@ -93,7 +93,7 @@ class _HomeState extends State<RecordPage> {
           ),
         ),
         title: Text(
-          'Record Audio',
+          'Sumbit Post',
           style: AppTheme.blackTextStyle.copyWith(
             fontSize: 18,
             fontWeight: AppTheme.bold,
@@ -130,7 +130,7 @@ class _HomeState extends State<RecordPage> {
                                   child: TextField(
                                     controller: _naming,
                                     decoration: const InputDecoration(
-                                        hintText: "Name your recording...",
+                                        hintText: "v",
                                         border: InputBorder
                                             .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                                         ),
@@ -138,135 +138,173 @@ class _HomeState extends State<RecordPage> {
                                 ),
                               ],
                             )),
-                        const SizedBox(height: 45),
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: isRecording
-                              ? AudioWaveforms(
-                                  enableGesture: true,
-                                  size: Size(
-                                      MediaQuery.of(context).size.width,
-
-                                      /// 2,
-                                      70),
-                                  recorderController: recorderController,
-                                  waveStyle: const WaveStyle(
-                                    waveColor: Colors.white,
-                                    extendWaveform: true,
-                                    showMiddleLine: false,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    color: AppColors.primaryColor2,
-                                  ),
-                                  padding: const EdgeInsets.only(left: 18),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 28),
-                                )
-                              : Container(
-                                  width:
-                                      MediaQuery.of(context).size.width, //1.7,
-                                  height: 70,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryColor2,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  padding: const EdgeInsets.only(left: 18),
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 28),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextField(
-                                        readOnly: true,
-                                        decoration: InputDecoration(
-                                          hintText: "Record Something...",
-                                          hintStyle: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white54),
-                                          border: InputBorder.none,
-                                          suffixIcon: IconButton(
-                                            onPressed: _pickFile,
-                                            icon: Icon(Icons.adaptive.share),
-                                            color: Colors.white54,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                        SizedBox(
+                          height: 5,
                         ),
-                        const SizedBox(height: 40),
                         Container(
-                          height: 225,
-                          width: 225,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor2.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(200),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      AppColors.primaryColor2.withOpacity(0.25),
-                                  borderRadius: BorderRadius.circular(200),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 230, 230, 230),
+                              border: Border.all(color: AppColors.whiteColor),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 270,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
                                 ),
-                                height: 160,
-                                width: 160,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primaryColor2,
-                                        /*gradient: const LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              AppColors.primaryColor2,
-                                              Color.fromARGB(255, 126, 87, 223),
-                                            ]),*/
-                                        //color: Color.fromARGB(255, 202, 146, 228),
-                                        borderRadius:
-                                            BorderRadius.circular(100),
+                                Expanded(
+                                  child: Text("city"
+                                      //  //   controller: _naming,
+                                      //     decoration: const InputDecoration(
+                                      //         hintText: "price...",
+                                      //         border: InputBorder
+                                      //             .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                      //         ),
                                       ),
-                                      width: 110,
-                                      height: 110,
-                                      child: IconButton(
-                                        onPressed: _startOrStopRecording,
-                                        icon: Icon(isRecording
-                                            ? Icons.stop
-                                            : Icons.mic),
-                                        color: AppColors.whiteColor,
-                                        iconSize: 65,
-                                      ),
-                                    ),
-                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 5,
                         ),
-                        const SizedBox(height: 30),
-                        StreamBuilder<int>(
-                          stream: _stopWatchTimer.rawTime,
-                          initialData: _stopWatchTimer.rawTime.value,
-                          builder: (context, snapshot) {
-                            final value = snapshot.data;
-                            final displayTime = StopWatchTimer.getDisplayTime(
-                                value!,
-                                hours: _isHours);
-
-                            return Text(displayTime,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 34,
-                                    color: AppColors.primaryColor2
-                                        .withOpacity(0.5)));
-                          },
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 230, 230, 230),
+                              border: Border.all(color: AppColors.whiteColor),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 270,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _naming,
+                                    decoration: const InputDecoration(
+                                        hintText: "price...",
+                                        border: InputBorder
+                                            .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 5,
                         ),
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 230, 230, 230),
+                              border: Border.all(color: AppColors.whiteColor),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 270,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _naming,
+                                    decoration: const InputDecoration(
+                                        hintText: "price...",
+                                        border: InputBorder
+                                            .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 230, 230, 230),
+                              border: Border.all(color: AppColors.whiteColor),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 270,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _naming,
+                                    decoration: const InputDecoration(
+                                        hintText: "price...",
+                                        border: InputBorder
+                                            .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 230, 230, 230),
+                              border: Border.all(color: AppColors.whiteColor),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 270,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _naming,
+                                    decoration: const InputDecoration(
+                                        hintText: "Decrption...",
+                                        border: InputBorder
+                                            .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                        const SizedBox(height: 165),
+                        Container(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 144, 161, 247),
+                              border: Border.all(
+                                  color: Color.fromARGB(255, 181, 165, 255)),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 50,
+                            width: 100,
+                            child: Row(
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                Expanded(
+                                  child: TextField(
+                                    controller: _naming,
+                                    decoration: const InputDecoration(
+                                        hintText: "Sumbit",
+                                        border: InputBorder
+                                            .none //OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            )),
                       ],
                     ),
                   ),
@@ -290,11 +328,10 @@ class _HomeState extends State<RecordPage> {
           path = recordedPath;
           File file = File(path!);
 
-          CollectionReference recordingsRef =
-              fireStore.collection('recordings');
+          CollectionReference recordingsRef = fireStore.collection('post');
           Map<String, dynamic> data = {
-            'audio': base64Encode(file.readAsBytesSync()),
-            'sender': auth.currentUser!.email,
+            'city': base64Encode(file.readAsBytesSync()),
+            'descrption': auth.currentUser!.email,
             'name': _naming.text,
             'senderId': auth.currentUser!.uid,
           };

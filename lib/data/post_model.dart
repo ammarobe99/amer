@@ -1,53 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PostModel {
-  final String sender;
-  final String senderId;
-  String imgProfile = 'assets/images/berk.png';
-  String? picture;
-  final String name;
-  List<String>? hashtags;
-  String like = '0';
-  String comment = '0';
-  String share = '0';
-  String audio = '';
+  String? id;
+  String? title;
+  String? content;
+  String? location;
+  String? budget;
+  DateTime? dateTime;
+  String? userId;
+  String? phoneNumber;
 
   PostModel({
-    required this.sender,
-    required this.senderId,
-    required this.imgProfile,
-    required this.picture,
-    required this.name,
-    required this.hashtags,
-    required this.like,
-    required this.comment,
-    required this.share,
-    required this.audio,
+    this.id,
+    this.title,
+    this.content,
+    this.location,
+    this.budget,
+    this.dateTime,
+    this.userId,
+    this.phoneNumber,
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
-        sender: json['sender'].split('@')[0],
-        senderId: json['senderId'],
-        imgProfile: json['sender'] == 'berk@gmail.com'
-            ? 'assets/images/berk.png'
-            : 'assets/images/ali.jpeg',
-        picture: null,
-        name: json['name'],
-        hashtags: null, //List<String>.from(json["hashtag"].map((x) => x)),
-        like: '0',
-        comment: '0',
-        share: '0',
-        audio: json['audio'],
-      );
+  factory PostModel.fromJson(Map<String, dynamic> json, String id) {
+    return PostModel(
+      id: id,
+      title: json['title'],
+      content: json['content'],
+      location: json['location'],
+      budget: json['budget'],
+      dateTime: (json['dateTime'] as Timestamp).toDate(),
+      userId: json['userId'],
+      phoneNumber: json['phoneNumber'],
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        'sender': sender,
-        'senderId': senderId,
-        'imgProfile': imgProfile,
-        'picture': picture,
-        'name': name,
-        'hashtag': hashtags,
-        'like': like,
-        'comment': comment,
-        'share': share,
-        'audio': audio,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'content': content,
+      'location': location,
+      'budget': budget,
+      'dateTime': DateTime.timestamp(),
+      'userId': userId,
+      'phoneNumber': phoneNumber,
+    };
+  }
 }

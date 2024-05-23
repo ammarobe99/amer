@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:social_media_app/app/configs/colors.dart';
 import 'package:social_media_app/app/configs/theme.dart';
+import 'package:social_media_app/ui/bloc/post_cubit.dart';
+import 'package:social_media_app/ui/pages/chat_page.dart';
+import 'package:social_media_app/ui/pages/profail.dart';
+import 'package:social_media_app/ui/pages/search_page.dart';
+import 'package:social_media_app/ui/widgets/card_post.dart';
 import 'package:social_media_app/ui/widgets/clip_status_bar.dart';
 import 'package:social_media_app/ui/widgets/post_card.dart';
 
@@ -213,47 +218,60 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const Spacer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(35),
-              color: AppColors.backgroundColor,
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: AppColors.whiteColor,
-                      width: 1,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.blackColor.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 10),
+          GestureDetector(
+            onTap: () {
+              // الانتقال إلى الصفحة الأخرى هنا
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyProfilePage()),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(35),
+                color: Colors.grey, // استخدم اللون المناسب هنا
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white, // استخدم اللون المناسب هنا
+                        width: 1,
                       ),
-                    ],
-                    image: DecorationImage(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                      image: DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
                           _firebaseAuth.currentUser!.email == 'berk@gmail.com'
                               ? 'assets/images/berk.png'
                               : 'assets/images/ali.jpeg',
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  _firebaseAuth.currentUser!.email!.split('@')[0],
-                  style: AppTheme.blackTextStyle
-                      .copyWith(fontWeight: AppTheme.bold, fontSize: 12),
-                ),
-                const SizedBox(width: 6),
-              ],
+                  const SizedBox(width: 6),
+                  Text(
+                    _firebaseAuth.currentUser!.email!.split('@')[0],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold, // استخدم الوزن المناسب هنا
+                      fontSize: 12,
+                      color: Colors.black, // استخدم اللون المناسب هنا
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                ],
+              ),
             ),
           )
         ],

@@ -26,8 +26,8 @@ class _MyWidgetState extends State<NavigationPage> {
   final List<Widget> pages = [
     const HomePage(),
     const SearchPage(),
-    const InboxPage(),
-    MyProfilePage(),
+    InboxPage(),
+    convertCurrency()
   ];
 
   @override
@@ -74,8 +74,7 @@ class _MyWidgetState extends State<NavigationPage> {
             _buildItemBottomNavBar("assets/images/ic_home.png", "Home", 0),
             _buildItemBottomNavBar("assets/images/ic_search.png", "Search", 1),
             _buildItemBottomNavBar("assets/images/ic_inbox.png", "Inbox", 2),
-            _buildItemBottomNavBar(
-                "assets/images/ic_profile.png", "Profile", 3),
+            _buildItemBottomNavBar("assets/images/change.png", "Currency", 3),
           ],
         ),
       ),

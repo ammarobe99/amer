@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_plus/loading_plus.dart';
-import 'package:social_media_app/app/configs/theme.dart';
-import 'package:social_media_app/app/resources/constant/named_routes.dart';
-import 'package:social_media_app/ui/pages/home_page.dart';
-import 'package:social_media_app/ui/pages/inbox_page.dart';
-import 'package:social_media_app/ui/pages/login_page.dart';
-import 'package:social_media_app/ui/pages/add_post_page.dart';
-import 'package:social_media_app/ui/pages/navigation_page.dart';
+import 'package:tamwelkom/app/configs/theme.dart';
+import 'package:tamwelkom/app/resources/constant/named_routes.dart';
+import 'package:tamwelkom/ui/pages/home_page.dart';
+import 'package:tamwelkom/ui/pages/inbox_page.dart';
+import 'package:tamwelkom/ui/pages/login_page.dart';
+import 'package:tamwelkom/ui/pages/add_post_page.dart';
+import 'package:tamwelkom/ui/pages/navigation_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           case NamedRoutes.inboxPage:
             return MaterialPageRoute(builder: (context) => const InboxPage());
           default:
-            return MaterialPageRoute(builder: (context) => LoginScreen());
+            return MaterialPageRoute(builder: (context) => const LoginScreen());
         }
       },
       builder: (BuildContext context, Widget? child) {

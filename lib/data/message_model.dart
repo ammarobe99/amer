@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Message {
   final String sender;
   final String time;

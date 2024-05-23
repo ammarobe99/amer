@@ -1,14 +1,9 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/data/message_model.dart';
-import 'package:social_media_app/ui/pages/chat_page.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/data/message_model.dart';
+import 'package:tamwelkom/ui/pages/chat_page.dart';
 
 class InboxPage extends StatefulWidget {
   const InboxPage({super.key});
@@ -80,7 +75,7 @@ class _InboxPageState extends State<InboxPage> {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.data != null) {
-                    final allData = snapshot.data!.docs.toList();
+                    // final allData = snapshot.data!.docs.toList();
                     return ListView.builder(
                         reverse: false,
                         itemCount: snapshot.data!.docs.length,
@@ -126,16 +121,14 @@ class _InboxPageState extends State<InboxPage> {
 }
 
 class InboxChat extends StatelessWidget {
-  String roomID;
-  String mail;
-
-  InboxChat({
-    Key? key,
+  const InboxChat({
+    super.key,
     required this.message,
     required this.roomID,
     required this.mail,
-  }) : super(key: key);
-
+  });
+  final String roomID;
+  final String mail;
   final Message message;
 
   Map<String, dynamic>? chatRoom(String id) {

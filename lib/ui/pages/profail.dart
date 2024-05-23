@@ -1,16 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/app/configs/theme.dart';
-import 'package:social_media_app/ui/bloc/gallery_profile_cubit.dart';
-import 'package:social_media_app/ui/bloc/post_cubit.dart';
-import 'package:social_media_app/ui/pages/login_page.dart';
-import 'package:social_media_app/ui/widgets/card_post.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/theme.dart';
+
+import '../../data/post_model.dart';
+import '../widgets/post_card.dart';
 
 class MyProfilePage extends StatelessWidget {
-  MyProfilePage({Key? key}) : super(key: key);
+  MyProfilePage({super.key});
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -76,33 +75,80 @@ class MyProfilePage extends StatelessWidget {
                   const SizedBox(height: 35),
                   _buildTabBar(),
                   const SizedBox(height: 24),
-                  BlocProvider(
-                    create: (context) =>
-                        PostCubit()..getMyPosts(_firebaseAuth.currentUser!.uid),
-                    child: BlocBuilder<PostCubit, PostState>(
-                      builder: (context, state) {
-                        if (state is PostError) {
-                          return Center(child: Text(state.message));
-                        } else if (state is PostLoaded) {
-                          return Column(
-                            children: [
-                              Column(
-                                children: state.posts
-                                    .map((post) => GestureDetector(
-                                          child: CardPost(post: post),
-                                        ))
-                                    .toList(),
-                              ),
-                              const SizedBox(height: 200)
-                            ],
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .orderBy('dateTime', descending: true)
+                        .where('userId',
+                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: Text(
+                            "No Project",
+                            style: TextStyle(
+                              fontSize: 28,
+                            ),
+                          ),
+                        );
+                      }
+                      final List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                          dataList = snapshot.data!.docs;
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: dataList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            QueryDocumentSnapshot<Map<String, dynamic>> item =
+                                dataList.elementAt(index);
+                            final PostModel postModel =
+                                PostModel.fromJson(item.data(), item.id);
+                            return PostCard(postModel: postModel);
+                          },
+                          separatorBuilder: (_, __) {
+                            return const SizedBox(height: 16.0);
+                          },
+                        ),
+                      );
+                    },
                   ),
+                  // BlocProvider(
+                  //   create: (context) =>
+                  //       PostCubit()..getMyPosts(_firebaseAuth.currentUser!.uid),
+                  //   child: BlocBuilder<PostCubit, PostState>(
+                  //     builder: (context, state) {
+                  //       if (state is PostError) {
+                  //         return Center(child: Text(state.message));
+                  //       } else if (state is PostLoaded) {
+                  //         return Column(
+                  //           children: [
+                  //             Column(
+                  //               children: state.posts
+                  //                   .map((post) => GestureDetector(
+                  //                         child: CardPost(post: post),
+                  //                       ))
+                  //                   .toList(),
+                  //             ),
+                  //             const SizedBox(height: 200)
+                  //           ],
+                  //         );
+                  //       } else {
+                  //         return const Center(
+                  //             child: CircularProgressIndicator());
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

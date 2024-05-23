@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/searvis/fetchrates.dart';
+import 'package:tamwelkom/services/fetchrates.dart';
 
-class AnyToAny extends StatefulWidget {
-  final rates;
+class CurrencyConverter extends StatefulWidget {
+  final Map<String, double> rates;
   final Map currencies;
-  const AnyToAny({Key? key, @required this.rates, required this.currencies})
-      : super(key: key);
+  const CurrencyConverter(
+      {super.key, required this.rates, required this.currencies});
 
   @override
-  _AnyToAnyState createState() => _AnyToAnyState();
+  CurrencyConverterState createState() => CurrencyConverterState();
 }
 
-class _AnyToAnyState extends State<AnyToAny> {
+class CurrencyConverterState extends State<CurrencyConverter> {
   TextEditingController amountController = TextEditingController();
 
   String dropdownValue1 = 'USD';
@@ -20,28 +20,27 @@ class _AnyToAnyState extends State<AnyToAny> {
 
   @override
   Widget build(BuildContext context) {
-    var w = MediaQuery.of(context).size.width;
     return Card(
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'Convert Any Currency',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             //TextFields for Entering USD
             TextFormField(
-              key: ValueKey('amount'),
+              key: const ValueKey('amount'),
               controller: amountController,
-              decoration: InputDecoration(hintText: 'Enter Amount'),
+              decoration: const InputDecoration(hintText: 'Enter Amount'),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -72,8 +71,8 @@ class _AnyToAnyState extends State<AnyToAny> {
                   ),
                 ),
                 Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: Text('To')),
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Text('To')),
                 Expanded(
                   child: DropdownButton<String>(
                     value: dropdownValue2,
@@ -104,32 +103,26 @@ class _AnyToAnyState extends State<AnyToAny> {
               ],
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   setState(() {
-                    answer = amountController.text +
-                        ' ' +
-                        dropdownValue1 +
-                        ' = ' +
-                        convertany(widget.rates, amountController.text,
-                            dropdownValue1, dropdownValue2) +
-                        ' ' +
-                        dropdownValue2;
+                    answer =
+                        '${amountController.text} $dropdownValue1 = ${convertany(widget.rates, amountController.text, dropdownValue1, dropdownValue2)} $dropdownValue2';
                   });
                 },
-                child: Text('Convert'),
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
+                    backgroundColor: WidgetStateProperty.all(
                         Theme.of(context).primaryColor)),
+                child: const Text('Convert'),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            SizedBox(height: 10),
-            Container(child: Text(answer))
+            const SizedBox(height: 10),
+            Text(answer)
           ],
         ),
       ),

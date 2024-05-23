@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_plus/loading_plus.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/data/post_model.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/data/post_model.dart';
 import '../../app/configs/theme.dart';
 
 class AddPostPage extends StatefulWidget {

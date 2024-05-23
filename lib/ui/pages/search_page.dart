@@ -1,17 +1,10 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/ui/pages/chat_page.dart';
-import 'package:social_media_app/ui/pages/profile_page.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/ui/pages/profile_page.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+  const SearchPage({super.key});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -20,8 +13,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   Map<String, dynamic>? userMap;
   bool isLoading = false;
-  final TextEditingController _search = TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _searchController = TextEditingController();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   String chatRoomId(String user1, String user2) {
     if (user1[0].toLowerCase().codeUnits[0] >
@@ -39,6 +32,8 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   void onSearch() async {
+    if (_searchController.text.isEmpty) return;
+
     FirebaseFirestore fireStore = FirebaseFirestore.instance;
     setState(() {
       isLoading = true;
@@ -46,7 +41,7 @@ class _SearchPageState extends State<SearchPage> {
 
     await fireStore
         .collection('users')
-        .where("email", isEqualTo: '${_search.text}@gmail.com')
+        .where("email", isEqualTo: '${_searchController.text}@gmail.com')
         .get()
         .then((value) {
       setState(() {
@@ -61,11 +56,11 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: isLoading
-          ? Center(
-              child: Container(
+          ? const Center(
+              child: SizedBox(
                 height: 50,
                 width: 50,
-                child: const CircularProgressIndicator(),
+                child: CircularProgressIndicator(),
               ),
             )
           : Column(
@@ -88,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 230, 230, 230),
+                          color: const Color.fromARGB(255, 230, 230, 230),
                           border: Border.all(color: AppColors.whiteColor),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -99,7 +94,7 @@ class _SearchPageState extends State<SearchPage> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
-                              child: Container(
+                              child: SizedBox(
                                 height: 30,
                                 child: Image.asset(
                                     'assets/images/ic_search.png',
@@ -108,7 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                             ),
                             Expanded(
                               child: TextField(
-                                controller: _search,
+                                controller: _searchController,
                                 decoration: const InputDecoration(
                                     hintText: "Search for a user...",
                                     border: InputBorder
@@ -176,7 +171,8 @@ class _SearchPageState extends State<SearchPage> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => ProfilePage(
-                                        email: '${_search.text}@gmail.com',
+                                        email:
+                                            '${_searchController.text}@gmail.com',
                                         id: userMap!['id'])));
                                 /*String roomId = chatRoomId(
                                     _auth.currentUser!.email!,

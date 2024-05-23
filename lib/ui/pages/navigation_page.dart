@@ -1,20 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/app/configs/theme.dart';
-import 'package:social_media_app/ui/pages/inbox_page.dart';
-import 'package:social_media_app/ui/pages/myprofile_page.dart';
-import 'package:social_media_app/ui/pages/search_page.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/theme.dart';
+import 'package:tamwelkom/ui/pages/inbox_page.dart';
+import 'package:tamwelkom/ui/pages/convert_currency_page.dart';
+import 'package:tamwelkom/ui/pages/search_page.dart';
 
 import 'home_page.dart';
-import 'chat_page.dart';
 
 class NavigationPage extends StatefulWidget {
   final int index;
 
-  const NavigationPage({Key? key, required this.index}) : super(key: key);
+  const NavigationPage({super.key, required this.index});
 
   @override
   State<NavigationPage> createState() => _MyWidgetState();
@@ -26,8 +22,8 @@ class _MyWidgetState extends State<NavigationPage> {
   final List<Widget> pages = [
     const HomePage(),
     const SearchPage(),
-    InboxPage(),
-    convertCurrency()
+    const InboxPage(),
+    const ConvertCurrency()
   ];
 
   @override

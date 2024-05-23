@@ -1,22 +1,23 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import '../../app/resources/constant/named_routes.dart';
-import 'package:social_media_app/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-const users = const {
+const Map<String, String> users = {
   'dribbble@gmail.com': '12345',
   'hunter@gmail.com': 'hunter',
 };
 
 class LoginScreen extends StatelessWidget {
-  Duration get loginTime => Duration(milliseconds: 2250);
+  const LoginScreen({super.key});
 
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  Duration get loginTime => const Duration(milliseconds: 2250);
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  //
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<String?> _authUser(LoginData data) async {
     debugPrint('Name: ${data.name}, Password: ${data.password}');
@@ -58,10 +59,12 @@ class LoginScreen extends StatelessWidget {
       }
 
       // Add user details to Firestore
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-        "email": data.name!,
-        "id": user.uid,
-      });
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set(
+        {
+          "id": user.uid,
+          "email": data.name!,
+        },
+      );
 
       debugPrint('Signup successful: ${data.name}');
       return null;

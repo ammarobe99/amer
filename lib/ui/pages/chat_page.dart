@@ -1,20 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/app/configs/theme.dart';
-import 'package:social_media_app/app/resources/constant/named_routes.dart';
-import 'package:social_media_app/ui/pages/navigation_page.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/theme.dart';
+import 'package:tamwelkom/ui/pages/navigation_page.dart';
 import 'package:chat_bubbles/chat_bubbles.dart';
 
 class ChatPage extends StatelessWidget {
   final Map<String, dynamic>? userMap;
   final Map<String, dynamic>? chatRoom;
 
-  ChatPage({this.chatRoom, this.userMap});
+  ChatPage({super.key, this.chatRoom, this.userMap});
 
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -34,9 +30,7 @@ class ChatPage extends StatelessWidget {
           _firestore.collection('chatroom').doc(chatRoom!['id']);
       await chatRoomRef.set(chatRoom!);
       await chatRoomRef.collection('chats').add(messages);
-    } else {
-      print("Enter Some Text");
-    }
+    } else {}
   }
 
   @override
@@ -72,7 +66,7 @@ class ChatPage extends StatelessWidget {
         reverse: true,
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: size.height / 1.25,
               width: size.width,
               child: StreamBuilder<QuerySnapshot>(
@@ -103,7 +97,7 @@ class ChatPage extends StatelessWidget {
               height: size.height / 10,
               width: size.width,
               alignment: Alignment.center,
-              child: Container(
+              child: SizedBox(
                 height: size.height / 12,
                 width: size.width / 1.1,
                 child: Row(
@@ -111,7 +105,7 @@ class ChatPage extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 219, 219, 219),
+                        color: const Color.fromARGB(255, 219, 219, 219),
                         border: Border.all(color: AppColors.whiteColor),
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -150,16 +144,14 @@ class ChatPage extends StatelessWidget {
           date: DateTime(2021, 5, 7),
           color: AppColors.primaryColor2.withOpacity(0.2),
         ),*/
-        Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 7),
-            child: BubbleNormal(
-              color: AppColors.primaryColor2,
-              isSender: map['sendby'] == _auth.currentUser!.uid ? true : false,
-              text: map['message'],
-              textStyle:
-                  const TextStyle(color: AppColors.whiteColor, fontSize: 16),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 7),
+          child: BubbleNormal(
+            color: AppColors.primaryColor2,
+            isSender: map['sendby'] == _auth.currentUser!.uid ? true : false,
+            text: map['message'],
+            textStyle:
+                const TextStyle(color: AppColors.whiteColor, fontSize: 16),
           ),
         ),
       ],

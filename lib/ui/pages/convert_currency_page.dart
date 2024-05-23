@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:social_media_app/data/rate.dart';
-import 'package:social_media_app/searvis/fetchrates.dart';
-import 'package:social_media_app/ui/pages/currrrrr.dart';
+import 'package:tamwelkom/data/rate.dart';
+import 'package:tamwelkom/ui/widgets/currency_converter.dart';
 
-class convertCurrency extends StatefulWidget {
-  const convertCurrency({Key? key}) : super(key: key);
+import '../../services/fetchrates.dart';
+
+class ConvertCurrency extends StatefulWidget {
+  const ConvertCurrency({super.key});
 
   @override
-  _convertCurrencyState createState() => _convertCurrencyState();
+  ConvertCurrencyState createState() => ConvertCurrencyState();
 }
 
-class _convertCurrencyState extends State<convertCurrency> {
+class ConvertCurrencyState extends State<ConvertCurrency> {
   //Initial Variables
 
   late Future<RatesModel> result;
@@ -35,8 +36,8 @@ class _convertCurrencyState extends State<convertCurrency> {
       body: Container(
         height: h,
         width: w,
-        padding: EdgeInsets.all(13),
-        margin: EdgeInsets.only(top: 60),
+        padding: const EdgeInsets.all(13),
+        margin: const EdgeInsets.only(top: 60),
         child: SingleChildScrollView(
           child: Form(
             key: formkey,
@@ -44,7 +45,7 @@ class _convertCurrencyState extends State<convertCurrency> {
               future: result,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return Center(
                   child: FutureBuilder<Map>(
@@ -52,13 +53,14 @@ class _convertCurrencyState extends State<convertCurrency> {
                       builder: (context, currSnapshot) {
                         if (currSnapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            AnyToAny(
+                            CurrencyConverter(
                               currencies: currSnapshot.data!,
                               rates: snapshot.data!.rates,
                             ),

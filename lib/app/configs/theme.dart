@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:social_media_app/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
 
 class AppTheme {
   static final TextStyle lightText = GoogleFonts.poppins(

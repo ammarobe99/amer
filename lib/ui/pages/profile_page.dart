@@ -1,21 +1,15 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_media_app/app/configs/colors.dart';
-import 'package:social_media_app/app/configs/theme.dart';
-import 'package:social_media_app/ui/bloc/gallery_profile_cubit.dart';
-import 'package:social_media_app/ui/bloc/post_cubit.dart';
-import 'package:social_media_app/ui/pages/chat_page.dart';
-import 'package:social_media_app/ui/pages/login_page.dart';
-import 'package:social_media_app/ui/widgets/card_post.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/app/configs/theme.dart';
+
+import '../../data/post_model.dart';
+import '../widgets/post_card.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key? key, required this.email, required this.id})
-      : super(key: key);
+  const ProfilePage({super.key, required this.email, required this.id});
 
   final String email;
   final String id;
@@ -148,32 +142,78 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 35),
                   _buildTabBar(),
                   const SizedBox(height: 24),
-                  BlocProvider(
-                    create: (context) => PostCubit()..getMyPosts(widget.id),
-                    child: BlocBuilder<PostCubit, PostState>(
-                      builder: (context, state) {
-                        if (state is PostError) {
-                          return Center(child: Text(state.message));
-                        } else if (state is PostLoaded) {
-                          return Column(
-                            children: [
-                              Column(
-                                children: state.posts
-                                    .map((post) => GestureDetector(
-                                          child: CardPost(post: post),
-                                        ))
-                                    .toList(),
-                              ),
-                              const SizedBox(height: 200)
-                            ],
-                          );
-                        } else {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .orderBy('dateTime', descending: true)
+                        .where('userId', isEqualTo: widget.id)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: Text(
+                            "No Project",
+                            style: TextStyle(
+                              fontSize: 28,
+                            ),
+                          ),
+                        );
+                      }
+                      final List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                          dataList = snapshot.data!.docs;
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: dataList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            QueryDocumentSnapshot<Map<String, dynamic>> item =
+                                dataList.elementAt(index);
+                            final PostModel postModel =
+                                PostModel.fromJson(item.data(), item.id);
+                            return PostCard(postModel: postModel);
+                          },
+                          separatorBuilder: (_, __) {
+                            return const SizedBox(height: 16.0);
+                          },
+                        ),
+                      );
+                    },
                   ),
+                  // BlocProvider(
+                  //   create: (context) => PostCubit()..getMyPosts(widget.id),
+                  //   child: BlocBuilder<PostCubit, PostState>(
+                  //     builder: (context, state) {
+                  //       if (state is PostError) {
+                  //         return Center(child: Text(state.message));
+                  //       } else if (state is PostLoaded) {
+                  //         return Column(
+                  //           children: [
+                  //             Column(
+                  //               children: state.posts
+                  //                   .map((post) => GestureDetector(
+                  //                         child: CardPost(post: post),
+                  //                       ))
+                  //                   .toList(),
+                  //             ),
+                  //             const SizedBox(height: 200)
+                  //           ],
+                  //         );
+                  //       } else {
+                  //         return const Center(
+                  //             child: CircularProgressIndicator());
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -215,17 +255,17 @@ class _ProfilePageState extends State<ProfilePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildProfileButton(),
+        // buildProfileButton(),
         const SizedBox(width: 12),
         GestureDetector(
           onTap: () {
-            String roomId =
-                chatRoomId(_firebaseAuth.currentUser!.email!, widget.email);
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => ChatPage(
-                      chatRoom: chatRoom(roomId),
-                      userMap: userMap(widget.email),
-                    )));
+            // String roomId =
+            //     chatRoomId(_firebaseAuth.currentUser!.email!, widget.email);
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (_) => ChatPage(
+            //           chatRoom: chatRoom(roomId),
+            //           userMap: userMap(widget.email),
+            //         )));
           },
           child: Container(
             width: 45,

@@ -23,8 +23,8 @@ class NavigationPage extends StatefulWidget {
 class _MyWidgetState extends State<NavigationPage> {
   late int _selectedIndex;
 
-  final pages = [
-    HomePage(),
+  final List<Widget> pages = [
+    const HomePage(),
     const SearchPage(),
     InboxPage(),
     convertCurrency()

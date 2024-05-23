@@ -30,8 +30,9 @@ class PostCubit extends Cubit<PostState> {
             .collection('audio')
             .get()
             .then((value) {
-          List<PostModel> postsTemp =
-              value.docs.map((e) => PostModel.fromJson(e.data())).toList();
+          List<PostModel> postsTemp = value.docs
+              .map((e) => PostModel.fromJson(e.data(), e.id))
+              .toList();
           posts.addAll(postsTemp);
         });
       }
@@ -48,7 +49,7 @@ class PostCubit extends Cubit<PostState> {
       CollectionReference recordingsRef = fireStore.collection('recordings');
       await recordingsRef.doc(id).collection('audio').get().then((value) {
         List<PostModel> postsTemp =
-            value.docs.map((e) => PostModel.fromJson(e.data())).toList();
+            value.docs.map((e) => PostModel.fromJson(e.data(), e.id)).toList();
         posts = postsTemp;
       });
       emit(PostLoaded(posts: posts));

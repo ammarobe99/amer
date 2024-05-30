@@ -9,6 +9,7 @@ class PostModel {
   DateTime? dateTime;
   String? userId;
   String? phoneNumber;
+  String? username;
 
   PostModel({
     this.id,
@@ -19,6 +20,7 @@ class PostModel {
     this.dateTime,
     this.userId,
     this.phoneNumber,
+    this.username,
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json, String id) {
@@ -31,6 +33,7 @@ class PostModel {
       dateTime: (json['dateTime'] as Timestamp).toDate(),
       userId: json['userId'],
       phoneNumber: json['phoneNumber'],
+      username: json['username'],
     );
   }
 
@@ -43,6 +46,7 @@ class PostModel {
       'dateTime': DateTime.timestamp(),
       'userId': userId,
       'phoneNumber': phoneNumber,
+      'username': username,
     };
   }
 }

@@ -12,38 +12,111 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final double width = MediaQuery.sizeOf(context).width;
     return Card(
-      child: ListTile(
-        onTap: () {
-          Navigator.push(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 4.0,
+              right: 16.0,
+              left: 16.0,
+            ),
+            child: Text('${postModel.username}'),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => DetailScreen(postModel: postModel)),
           );
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        title: Text(
-          '${postModel.title}',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+            },
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            title: Text(
+              '${postModel.title}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Text(
+              '${postModel.content}',
+            ),
+            trailing: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '${postModel.budget} JOD',
+                ),
+                Text(
+                  '${postModel.location}',
+                ),
+              ],
+            ),
+            leading: IconButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return SizedBox(
+                      width: width,
+                      height: 240.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FilledButton(
+                            onPressed: () async {
+                              final ScaffoldMessengerState scaffoldMessengerState =
+                                  ScaffoldMessenger.of(context);
+                              final NavigatorState navigatorState = Navigator.of(context);
+                              try {
+                                await launchUrl(Uri.parse('tel:${postModel.phoneNumber}'));
+                              } catch (e) {
+                                navigatorState.pop();
+                                scaffoldMessengerState.showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Something went wrong, try again!'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text('Phone call'),
+                          ),
+                          FilledButton(
+                            onPressed: () async {
+                              final ScaffoldMessengerState scaffoldMessengerState =
+                                  ScaffoldMessenger.of(context);
+                              final NavigatorState navigatorState = Navigator.of(context);
+                              try {
+                                final WhatsAppUnilink link = WhatsAppUnilink(
+                                  phoneNumber: postModel.phoneNumber,
+                                );
+                                await launchUrl(link.asUri());
+                              } catch (e) {
+                                navigatorState.pop();
+                                scaffoldMessengerState.showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Something went wrong, try again!'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text('WhatsApp'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.phone),
+            ),
           ),
-        ),
-        subtitle: Text(
-          "${postModel.content}",
-        ),
-        trailing: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '${postModel.budget} JOD',
-            ),
-            Text(
-              "${postModel.location}",
-            ),
-          ],
-        ),
-        leading: const Icon(Icons.phone),
+        ],
       ),
     );
   }

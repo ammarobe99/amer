@@ -29,6 +29,7 @@ class _HomeState extends State<AddPostPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   // final StopWatchTimer _stopWatchTimer = StopWatchTimer();
   // final _isHours = true;
+  late TextEditingController yourNameController;
   late TextEditingController titleController;
   late TextEditingController contentController;
   late TextEditingController locationController;
@@ -38,6 +39,7 @@ class _HomeState extends State<AddPostPage> {
   DateTime? expiryDate;
   @override
   void initState() {
+    yourNameController = TextEditingController();
     titleController = TextEditingController();
     contentController = TextEditingController();
     locationController = TextEditingController();
@@ -49,6 +51,7 @@ class _HomeState extends State<AddPostPage> {
 
   @override
   void dispose() {
+    yourNameController.dispose();
     titleController.dispose();
     contentController.dispose();
     locationController.dispose();
@@ -92,6 +95,18 @@ class _HomeState extends State<AddPostPage> {
           child: ListView(
             physics: const ClampingScrollPhysics(),
             children: [
+              CustomTextField(
+                controller: yourNameController,
+                label: 'Your name',
+                textInputAction: TextInputAction.next,
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Name required';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16.0),
               CustomTextField(
                 controller: titleController,
                 label: 'Title',
@@ -163,8 +178,7 @@ class _HomeState extends State<AddPostPage> {
                     lastDate: DateTime.now().add(const Duration(days: 365)),
                   );
                   if (dateTime == null) return;
-                  expiryDateController.text =
-                      DateFormat('dd/MM/yyyy').format(dateTime);
+                  expiryDateController.text = DateFormat('dd/MM/yyyy').format(dateTime);
                   expiryDate = dateTime;
                 },
                 child: CustomTextField(
@@ -196,11 +210,11 @@ class _HomeState extends State<AddPostPage> {
   }
 
   Future<void> submitPost() async {
-    final ScaffoldMessengerState scaffoldMessengerState =
-        ScaffoldMessenger.of(context);
+    final ScaffoldMessengerState scaffoldMessengerState = ScaffoldMessenger.of(context);
     final NavigatorState navigatorState = Navigator.of(context);
     try {
       final PostModel postModel = PostModel(
+        username: yourNameController.text.trim(),
         title: titleController.text.trim(),
         content: contentController.text.trim(),
         location: locationController.text.trim(),

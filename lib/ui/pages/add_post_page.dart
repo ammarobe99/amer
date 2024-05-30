@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_plus/loading_plus.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
@@ -252,6 +253,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     required this.label,
+    this.helperText,
     this.textInputAction,
     this.textInputType,
     this.enabled = true,
@@ -259,10 +261,13 @@ class CustomTextField extends StatelessWidget {
     this.ignorePointers,
     this.maxLines = 1,
     this.validator,
+    this.inputFormatters,
+    this.onChanged,
   });
 
   final TextEditingController controller;
   final String label;
+  final String? helperText;
   final TextInputAction? textInputAction;
   final TextInputType? textInputType;
   final bool enabled;
@@ -270,7 +275,8 @@ class CustomTextField extends StatelessWidget {
   final bool? ignorePointers;
   final int maxLines;
   final String? Function(String?)? validator;
-
+  final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -281,8 +287,10 @@ class CustomTextField extends StatelessWidget {
       readOnly: readOnly,
       maxLines: maxLines,
       ignorePointers: ignorePointers,
+      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         labelText: label,
+        helperText: helperText,
         enabledBorder: const OutlineInputBorder(),
         disabledBorder: const OutlineInputBorder(),
         focusedBorder: const OutlineInputBorder(
@@ -295,6 +303,7 @@ class CustomTextField extends StatelessWidget {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       validator: validator,
+      onChanged: onChanged,
     );
   }
 }

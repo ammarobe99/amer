@@ -31,14 +31,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
               .collection('financing')
               .where('postId', isEqualTo: '${widget.postModel.id}')
               .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
-            budget = num.tryParse(widget.postModel.budget!)?.toDouble() ?? 1000.0;
+            budget =
+                num.tryParse(widget.postModel.budget!)?.toDouble() ?? 1000.0;
             if (snapshot.hasData) {
               if (snapshot.data!.docs.isNotEmpty) {
                 for (var e in snapshot.data!.docs) {
@@ -56,7 +57,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     padding: EdgeInsets.only(left: 20),
                     child: Text(
                       'Project Details',
-                      style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Padding(
@@ -108,99 +110,117 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           ),
                         ),
                         const SizedBox(height: 16.0),
-                        Center(
-                          child: FilledButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (ctx) {
-                                  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-                                  final TextEditingController financingController =
-                                      TextEditingController();
-                                  double? profitRatio;
-                                  final double bud = budget;
-                                  return StatefulBuilder(
-                                      builder: (BuildContext context, StateSetter setState) {
-                                    return AlertDialog(
-                                      title: const Text('Finance'),
-                                      content: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Form(
-                                            key: formKey,
-                                            child: CustomTextField(
-                                              controller: financingController,
-                                              textInputType: TextInputType.number,
-                                              label: 'Enter the financing amount',
-                                              helperText: '1 - $budget',
-                                              inputFormatters: [
-                                                NumericalRangeFormatter(
-                                                  min: 1,
-                                                  max: budget,
-                                                ),
-                                              ],
-                                              validator: (String? value) {
-                                                if (value == null || value.isEmpty) {
-                                                  return 'Field required';
-                                                }
-                                                return null;
-                                              },
-                                              onChanged: (String value) {
-                                                final String text = value.isEmpty ? '0.0' : value;
-                                                final double num = double.parse(text);
-                                                profitRatio = 100 / (bud / num);
-                                                setState(() {});
-                                              },
-                                            ),
-                                          ),
-                                          if (profitRatio != null) ...[
-                                            const SizedBox(height: 16.0),
-                                            Text(
-                                                'Profit ratio: ${profitRatio!.toStringAsFixed(2)}%'),
-                                          ],
-                                        ],
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: const Text('Cancel'),
-                                        ),
-                                        FilledButton(
-                                          onPressed: () async {
-                                            if (!formKey.currentState!.validate()) return;
-                                            LoadingPlusController().show();
-                                            try {
-                                              await FirebaseFirestore.instance
-                                                  .collection('financing')
-                                                  .add(
-                                                {
-                                                  'postId': widget.postModel.id,
-                                                  'financierId':
-                                                      FirebaseAuth.instance.currentUser!.uid,
-                                                  'price': financingController.text.trim(),
-                                                  'profitRatio': profitRatio,
+                        if (budget != 0.0)
+                          Center(
+                            child: FilledButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) {
+                                    final GlobalKey<FormState> formKey =
+                                        GlobalKey<FormState>();
+                                    final TextEditingController
+                                        financingController =
+                                        TextEditingController();
+                                    double? profitRatio;
+                                    final double bud = budget;
+                                    return StatefulBuilder(builder:
+                                        (BuildContext context,
+                                            StateSetter setState) {
+                                      return AlertDialog(
+                                        title: const Text('Finance'),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Form(
+                                              key: formKey,
+                                              child: CustomTextField(
+                                                controller: financingController,
+                                                textInputType:
+                                                    TextInputType.number,
+                                                label:
+                                                    'Enter the financing amount',
+                                                helperText: '1 - $budget',
+                                                inputFormatters: [
+                                                  NumericalRangeFormatter(
+                                                    min: 1,
+                                                    max: budget,
+                                                  ),
+                                                ],
+                                                validator: (String? value) {
+                                                  if (value == null ||
+                                                      value.isEmpty) {
+                                                    return 'Field required';
+                                                  }
+                                                  return null;
                                                 },
-                                              );
-                                            } catch (_) {}
-                                            if (context.mounted) {
-                                              Navigator.pop(context);
-                                            }
-
-                                            LoadingPlusController().dismiss();
-                                          },
-                                          child: const Text('Done'),
+                                                onChanged: (String value) {
+                                                  final String text =
+                                                      value.isEmpty
+                                                          ? '0.0'
+                                                          : value;
+                                                  final double num =
+                                                      double.parse(text);
+                                                  profitRatio =
+                                                      100 / (bud / num);
+                                                  setState(() {});
+                                                },
+                                              ),
+                                            ),
+                                            if (profitRatio != null) ...[
+                                              const SizedBox(height: 16.0),
+                                              Text(
+                                                  'Profit ratio: ${profitRatio!.toStringAsFixed(2)}%'),
+                                            ],
+                                          ],
                                         ),
-                                      ],
-                                    );
-                                  });
-                                },
-                              );
-                            },
-                            child: const Text('Finance'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () async {
+                                              if (!formKey.currentState!
+                                                  .validate()) return;
+                                              LoadingPlusController().show();
+                                              try {
+                                                await FirebaseFirestore.instance
+                                                    .collection('financing')
+                                                    .add(
+                                                  {
+                                                    'postId':
+                                                        widget.postModel.id,
+                                                    'financierId': FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid,
+                                                    'price': financingController
+                                                        .text
+                                                        .trim(),
+                                                    'profitRatio': profitRatio,
+                                                  },
+                                                );
+                                              } catch (_) {}
+                                              if (context.mounted) {
+                                                Navigator.pop(context);
+                                              }
+
+                                              LoadingPlusController().dismiss();
+                                            },
+                                            child: const Text('Done'),
+                                          ),
+                                        ],
+                                      );
+                                    });
+                                  },
+                                );
+                              },
+                              child: const Text('Finance'),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),

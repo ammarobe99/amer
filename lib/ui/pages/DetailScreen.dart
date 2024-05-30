@@ -3,16 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:tamwelkom/data/message_model.dart';
+import 'package:tamwelkom/data/post_model.dart';
 import 'package:tamwelkom/ui/pages/chat_page.dart';
 
-class InboxPage extends StatefulWidget {
-  const InboxPage({super.key});
+class DetailScreen extends StatefulWidget {
+  const DetailScreen({super.key, required PostModel postModel});
 
   @override
-  State<InboxPage> createState() => _InboxPageState();
+  State<DetailScreen> createState() => _DetailScreenState();
 }
 
-class _InboxPageState extends State<InboxPage> {
+class _DetailScreenState extends State<DetailScreen> {
   Map<String, dynamic>? userMap;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
@@ -21,15 +22,6 @@ class _InboxPageState extends State<InboxPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  String chatRoomId(String user1, String user2) {
-    if (user1[0].toLowerCase().codeUnits[0] >
-        user2.toLowerCase().codeUnits[0]) {
-      return "$user1-$user2";
-    } else {
-      return "$user2-$user1";
-    }
   }
 
 //edit here
@@ -52,22 +44,22 @@ class _InboxPageState extends State<InboxPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
+          SizedBox(
             height: 70,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
-              'My Project',
+              'Project Details',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           // Expanded(
           //   child: SizedBox(
           //     height: MediaQuery.of(context).size.height * 0.8,
@@ -116,109 +108,6 @@ class _InboxPageState extends State<InboxPage> {
           //   ),
           // ),
         ],
-      ),
-    );
-  }
-}
-
-class InboxChat extends StatelessWidget {
-  const InboxChat({
-    super.key,
-    required this.message,
-    required this.roomID,
-    required this.mail,
-  });
-  final String roomID;
-  final String mail;
-  final Message message;
-
-  Map<String, dynamic>? chatRoom(String id) {
-    return {
-      "id": id,
-    };
-  }
-
-  Map<String, dynamic>? userMap(String mail) {
-    return {
-      "email": mail,
-    };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => ChatPage(
-                  chatRoom: chatRoom(roomID),
-                  userMap: userMap(mail),
-                )));
-      },
-      child: Container(
-        color: Colors.transparent,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 10,
-        ),
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.greyColor.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              child: CircleAvatar(
-                  radius: 35, backgroundImage: AssetImage(message.image)),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.65,
-              padding: const EdgeInsets.only(left: 20),
-              child: Column(
-                //crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        message.sender,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(message.time,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.black54,
-                          ))
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      message.text,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                        color: Colors.black54,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamwelkom/data/post_model.dart';
+import 'package:tamwelkom/ui/pages/DetailScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
@@ -13,63 +14,10 @@ class PostCard extends StatelessWidget {
     return Card(
       child: ListTile(
         onTap: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return SizedBox(
-                width: width,
-                height: 240.0,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FilledButton(
-                      onPressed: () async {
-                        final ScaffoldMessengerState scaffoldMessengerState =
-                            ScaffoldMessenger.of(context);
-                        final NavigatorState navigatorState =
-                            Navigator.of(context);
-                        try {
-                          await launchUrl(
-                              Uri.parse('tel:${postModel.phoneNumber}'));
-                        } catch (e) {
-                          navigatorState.pop();
-                          scaffoldMessengerState.showSnackBar(
-                            const SnackBar(
-                              content: Text('Something went wrong, try again!'),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('Phone call'),
-                    ),
-                    FilledButton(
-                      onPressed: () async {
-                        final ScaffoldMessengerState scaffoldMessengerState =
-                            ScaffoldMessenger.of(context);
-                        final NavigatorState navigatorState =
-                            Navigator.of(context);
-                        try {
-                          final WhatsAppUnilink link = WhatsAppUnilink(
-                            phoneNumber: postModel.phoneNumber,
-                          );
-                          await launchUrl(link.asUri());
-                        } catch (e) {
-                          navigatorState.pop();
-                          scaffoldMessengerState.showSnackBar(
-                            const SnackBar(
-                              content: Text('Something went wrong, try again!'),
-                            ),
-                          );
-                        }
-                      },
-                      child: const Text('WhatsApp'),
-                    ),
-                  ],
-                ),
-              );
-            },
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailScreen(postModel: postModel)),
           );
         },
         shape: RoundedRectangleBorder(
@@ -82,7 +30,7 @@ class PostCard extends StatelessWidget {
           ),
         ),
         subtitle: Text(
-          '${postModel.content}',
+          "${postModel.content}",
         ),
         trailing: Column(
           mainAxisSize: MainAxisSize.min,
@@ -91,7 +39,7 @@ class PostCard extends StatelessWidget {
               '${postModel.budget} JOD',
             ),
             Text(
-              '${postModel.location}',
+              "${postModel.location}",
             ),
           ],
         ),

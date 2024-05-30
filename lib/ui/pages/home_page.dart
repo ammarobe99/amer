@@ -30,7 +30,6 @@ class _HomePageState extends State<HomePage> {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
-    print('DateTime.timestamp(): ${Timestamp.fromDate(DateTime.now())}');
     return SafeArea(
       bottom: false,
       child: Scaffold(
@@ -216,10 +215,10 @@ class _HomePageState extends State<HomePage> {
                 // For example, navigate to the login screen and clear user session
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                 ); // You can also add logic to clear user session
               },
-              child: Icon(
+              child: const Icon(
                 Icons.logout,
                 size: 30,
                 color: Colors.black, // Set the color you prefer
@@ -257,7 +256,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
             },
             child: Container(

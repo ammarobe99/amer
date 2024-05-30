@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:tamwelkom/data/message_model.dart';
@@ -13,61 +11,24 @@ class InboxPage extends StatefulWidget {
 }
 
 class _InboxPageState extends State<InboxPage> {
-  Map<String, dynamic>? userMap;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore fireStore = FirebaseFirestore.instance;
-  String latestMessage = '';
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  String chatRoomId(String user1, String user2) {
-    if (user1[0].toLowerCase().codeUnits[0] >
-        user2.toLowerCase().codeUnits[0]) {
-      return "$user1-$user2";
-    } else {
-      return "$user2-$user1";
-    }
-  }
-
-//edit here
-  void findLastMessage(String roomId) async {
-    String lastMessage = '';
-    await fireStore
-        .collection('chatroom')
-        .doc(roomId)
-        .collection('chats')
-        .orderBy('time', descending: true)
-        .limit(1)
-        .get()
-        .then((value) {
-      lastMessage = value.docs[0].data()['message'];
-    });
-    setState(() {
-      latestMessage = lastMessage;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.whiteColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
+          SizedBox(
             height: 70,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(left: 20),
             child: Text(
               'My Project',
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: 10),
           // Expanded(
           //   child: SizedBox(
           //     height: MediaQuery.of(context).size.height * 0.8,
@@ -173,8 +134,7 @@ class InboxChat extends StatelessWidget {
                   ),
                 ],
               ),
-              child: CircleAvatar(
-                  radius: 35, backgroundImage: AssetImage(message.image)),
+              child: CircleAvatar(radius: 35, backgroundImage: AssetImage(message.image)),
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.65,

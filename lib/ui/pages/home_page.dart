@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/ui/pages/login_page.dart';
 import 'package:tamwelkom/ui/pages/profail.dart';
 import 'package:tamwelkom/ui/widgets/clip_status_bar.dart';
 import 'package:tamwelkom/ui/widgets/post_card.dart';
@@ -200,32 +201,67 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.blackColor.withOpacity(0.2),
+                  color: Colors.black.withOpacity(0.2),
                   blurRadius: 35,
                   offset: const Offset(0, 10),
                 ),
               ],
             ),
-            child: Image.asset(
-              'assets/images/business-and-finance.png',
-              width: 30,
-              height: 30,
+            child: GestureDetector(
+              onTap: () {
+                // Add your logout logic here
+                // For example, navigate to the login screen and clear user session
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                ); // You can also add logic to clear user session
+              },
+              child: Icon(
+                Icons.logout,
+                size: 30,
+                color: Colors.black, // Set the color you prefer
+              ),
             ),
           ),
+          // SizedBox(
+          //   width: 120,
+          // ),
+          // Container(
+          //   width: 80,
+          //   height: 50,
+          //   decoration: BoxDecoration(
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color:
+          //             const Color.fromARGB(255, 255, 255, 255).withOpacity(0.2),
+          //         blurRadius: 35,
+          //         offset: const Offset(0, 10),
+          //       ),
+          //     ],
+          //   ),
+          //   child: const Center(
+          //     child: Text(
+          //       'Home Page',
+          //       style: TextStyle(
+          //         color: Colors.black,
+          //         fontSize: 12,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           const Spacer(),
           GestureDetector(
             onTap: () {
-              // الانتقال إلى الصفحة الأخرى هنا
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MyProfilePage()),
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
               );
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(35),
-                color: Colors.grey, // استخدم اللون المناسب هنا
+                color: Colors.grey,
               ),
               child: Row(
                 children: [
@@ -235,7 +271,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Colors.white, // استخدم اللون المناسب هنا
+                        color: Colors.white,
                         width: 1,
                       ),
                       boxShadow: [

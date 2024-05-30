@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> {
         statusBarIconBrightness: Brightness.dark,
       ),
     );
+    print('DateTime.timestamp(): ${Timestamp.fromDate(DateTime.now())}');
     return SafeArea(
       bottom: false,
       child: Scaffold(
@@ -45,10 +46,14 @@ class _HomePageState extends State<HomePage> {
                     stream: FirebaseFirestore.instance
                         .collection('posts')
                         .orderBy('dateTime', descending: true)
+                        .where('userId', isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                        // .where(
+                        //   'dateTime',
+                        //   isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()),
+                        // )
                         .snapshots(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -64,8 +69,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       }
-                      final List<QueryDocumentSnapshot<Map<String, dynamic>>>
-                          dataList = snapshot.data!.docs;
+                      final List<QueryDocumentSnapshot<Map<String, dynamic>>> dataList =
+                          snapshot.data!.docs;
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ListView.separated(
@@ -73,8 +78,7 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (BuildContext context, int index) {
                             QueryDocumentSnapshot<Map<String, dynamic>> item =
                                 dataList.elementAt(index);
-                            final PostModel postModel =
-                                PostModel.fromJson(item.data(), item.id);
+                            final PostModel postModel = PostModel.fromJson(item.data(), item.id);
                             return PostCard(postModel: postModel);
                           },
                           separatorBuilder: (_, __) {
@@ -155,8 +159,7 @@ class _HomePageState extends State<HomePage> {
                   clipper: ClipStatusBar(),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(NamedRoutes.addPostScreen);
+                      Navigator.of(context).pushNamed(NamedRoutes.addPostScreen);
                     },
                     child: Container(
                       height: 110,

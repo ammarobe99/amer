@@ -72,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
                 const Padding(
                   padding: EdgeInsets.only(left: 20),
                   child: Text(
-                    'Find a New Friend!',
+                    'Find a New User!',
                     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                   ),
                 ),

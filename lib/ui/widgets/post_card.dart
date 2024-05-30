@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamwelkom/data/post_model.dart';
+import 'package:tamwelkom/ui/pages/DetailScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
@@ -24,7 +25,13 @@ class PostCard extends StatelessWidget {
             child: Text('${postModel.username}'),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailScreen(postModel: postModel)),
+          );
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
             ),

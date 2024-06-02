@@ -1,75 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:tamwelkom/data/infoUser.dart';
+import 'package:tamwelkom/data/post_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/data/message_model.dart';
+import 'package:tamwelkom/ui/pages/chat_page.dart';
 
-class UserModel {
-  final String name;
-  final int age;
-  final String gender;
-  final String email;
-
-  UserModel({
-    required this.name,
-    required this.age,
-    required this.gender,
-    required this.email,
-  });
-}
+import '../../data/post_model.dart';
+import '../widgets/post_card.dart';
 
 class ProfileScreen extends StatelessWidget {
-  //  UserModel userModel;
-
   const ProfileScreen({super.key});
+
+  Future<infoUser> fetchUserInfo() async {
+    // Assuming you have a 'users' collection where user data is stored
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      DocumentSnapshot doc =
+          await FirebaseFirestore.instance.collection('userInfo').doc().get();
+
+      if (doc.exists) {
+        // Create an instance of infoUser from the fetched data
+        return infoUser.fromDocument(doc);
+      }
+    }
+    // Return a default user info or handle accordingly if no user is found
+    return infoUser(username: 'Guest', email: 'guest@example.com');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Profile"),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.white,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/student.png'),
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: Text(
-                "userModel.name",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ),
-            ),
-            SizedBox(height: 40),
-            ProfileDetail(
-              icon: Icons.person,
-              label: 'Name',
-              value: "userModel.name",
-            ),
-            ProfileDetail(
-              icon: Icons.cake,
-              label: 'Age',
-              value: '{userModel.age} years',
-            ),
-            ProfileDetail(
-              icon: Icons.person_outline,
-              label: 'Gender',
-              value: "userModel.gender",
-            ),
-            ProfileDetail(
-              icon: Icons.email,
-              label: 'Email',
-              value: "userModel.email",
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: FutureBuilder<infoUser>(
+          future: fetchUserInfo(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return Center(child: Text('User data not found'));
+            } else {
+              infoUser userInfo = snapshot.data!;
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: AssetImage('assets/images/student.png'),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      userInfo.username ?? '',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  ProfileDetail(
+                    icon: Icons.person,
+                    label: 'Name',
+                    value: userInfo.username ?? '',
+                  ),
+                  ProfileDetail(
+                    icon: Icons.email,
+                    label: 'Age',
+                    value: "18" ?? '',
+                  ),
+                  ProfileDetail(
+                    icon: Icons.email,
+                    label: 'Email',
+                    value: userInfo.email ?? '',
+                  ),
+                  ProfileDetail(
+                    icon: Icons.email,
+                    label: 'Email',
+                    value: userInfo.email ?? '',
+                  ),
+                  ProfileDetail(
+                    icon: Icons.email,
+                    label: 'Email',
+                    value: userInfo.email ?? '',
+                  ),
+                  // Add other profile details as needed
+                ],
+              );
+            }
+          },
         ),
       ),
     );
@@ -121,6 +152,20 @@ class ProfileDetail extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class infoUser {
+  final String? username;
+  final String? email;
+
+  infoUser({this.username, this.email});
+
+  factory infoUser.fromDocument(DocumentSnapshot doc) {
+    return infoUser(
+      username: doc['username'],
+      email: doc['email'],
     );
   }
 }

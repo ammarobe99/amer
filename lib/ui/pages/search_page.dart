@@ -16,21 +16,6 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   // final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String chatRoomId(String user1, String user2) {
-    if (user1[0].toLowerCase().codeUnits[0] >
-        user2.toLowerCase().codeUnits[0]) {
-      return "$user1-$user2";
-    } else {
-      return "$user2-$user1";
-    }
-  }
-
-  Map<String, dynamic>? chatRoom(String id) {
-    return {
-      "id": id,
-    };
-  }
-
   void onSearch() async {
     if (_searchController.text.isEmpty) return;
 

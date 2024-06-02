@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
+import 'package:tamwelkom/data/infoUser.dart';
 import 'package:tamwelkom/ui/pages/login_page.dart';
 import 'package:tamwelkom/ui/pages/profail.dart';
 import 'package:tamwelkom/ui/widgets/clip_status_bar.dart';
@@ -46,14 +47,17 @@ class _HomePageState extends State<HomePage> {
                     stream: FirebaseFirestore.instance
                         .collection('posts')
                         .orderBy('dateTime', descending: true)
-                        .where('userId', isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                        .where('userId',
+                            isNotEqualTo:
+                                FirebaseAuth.instance.currentUser!.uid)
                         // .where(
                         //   'dateTime',
                         //   isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now()),
                         // )
                         .snapshots(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -69,8 +73,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       }
-                      final List<QueryDocumentSnapshot<Map<String, dynamic>>> dataList =
-                          snapshot.data!.docs;
+                      final List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                          dataList = snapshot.data!.docs;
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ListView.separated(
@@ -78,7 +82,8 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (BuildContext context, int index) {
                             QueryDocumentSnapshot<Map<String, dynamic>> item =
                                 dataList.elementAt(index);
-                            final PostModel postModel = PostModel.fromJson(item.data(), item.id);
+                            final PostModel postModel =
+                                PostModel.fromJson(item.data(), item.id);
                             return PostCard(postModel: postModel);
                           },
                           separatorBuilder: (_, __) {
@@ -91,66 +96,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            // SingleChildScrollView(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-            //     child: Column(
-            //       children: [
-            //         const SizedBox(height: 12),
-            //         _buildCustomAppBar(context),
-            //         const SizedBox(height: 18),
-            //         BlocProvider(
-            //           create: (context) =>
-            //               PostCubit()..getPosts(_firebaseAuth.currentUser!.uid),
-            //           child: BlocBuilder<PostCubit, PostState>(
-            //             builder: (context, state) {
-            //               if (state is PostError) {
-            //                 return Center(child: Text(state.message));
-            //               } else if (state is PostLoaded) {
-            //                 return Column(
-            //                   children: [
-            //                     if (state.posts.isNotEmpty)
-            //                       Column(
-            //                         children: state.posts
-            //                             .map((post) => GestureDetector(
-            //                                   child: CardPost(post: post),
-            //                                 ))
-            //                             .toList(),
-            //                       ),
-            //                     if (state.posts.isEmpty)
-            //                       const SizedBox(
-            //                         height: 1000,
-            //                         child: Padding(
-            //                           padding: EdgeInsets.only(top: 200),
-            //                           child: Text("No Project",
-            //                               style: TextStyle(
-            //                                 fontSize: 28,
-            //                               )),
-            //                         ),
-            //                       ),
-            //                     const SizedBox(height: 1000)
-            //                   ],
-            //
-            //                   /*children: state.posts
-            //                       .map((post) => GestureDetector(
-            //                             child: CardPost(post: post),
-            //                           ))
-            //                       .toList(),*/
-            //                 );
-            //               } else {
-            //                 return const Column(children: [
-            //                   CircularProgressIndicator(),
-            //                   SizedBox(height: 1000)
-            //                 ]);
-            //               }
-            //             },
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            _buildBackgroundGradient(),
             Positioned(
               bottom: 91,
               child: Transform.rotate(
@@ -159,7 +104,8 @@ class _HomePageState extends State<HomePage> {
                   clipper: ClipStatusBar(),
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed(NamedRoutes.addPostScreen);
+                      Navigator.of(context)
+                          .pushNamed(NamedRoutes.addPostScreen);
                     },
                     child: Container(
                       height: 110,
@@ -180,17 +126,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-  _buildBackgroundGradient() => Container(
-        width: double.infinity,
-        height: 150,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            AppColors.whiteColor.withOpacity(0),
-            AppColors.whiteColor.withOpacity(0.8),
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-        ),
-      );
 
   CustomAppBar _buildCustomAppBar(BuildContext context) {
     return CustomAppBar(
@@ -283,12 +218,10 @@ class _HomePageState extends State<HomePage> {
                           offset: const Offset(0, 10),
                         ),
                       ],
-                      image: DecorationImage(
+                      image: const DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
-                          _firebaseAuth.currentUser!.email == 'berk@gmail.com'
-                              ? 'assets/images/berk.png'
-                              : 'assets/images/ali.jpeg',
+                          'assets/images/ali.jpeg',
                         ),
                       ),
                     ),

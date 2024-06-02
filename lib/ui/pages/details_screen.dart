@@ -28,7 +28,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
       backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
         title: const Text('Details'),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: const Color.fromARGB(255, 243, 240, 249),
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
@@ -141,7 +141,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       onChanged: (String value) {
                         final String text = value.isEmpty ? '0.0' : value;
                         final double num = double.parse(text);
-                        profitRatio = 100 / (bud / num);
+                        profitRatio = 75 / (bud / num);
                         setState(() {});
                       },
                     ),

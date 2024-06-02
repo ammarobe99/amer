@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
+import 'package:tamwelkom/ui/pages/add_userDetils.dart';
 import '../../app/resources/constant/named_routes.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -92,7 +93,7 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       theme: LoginTheme(
         cardTopPosition: 250,
-        primaryColor: AppColors.primaryColor2,
+        primaryColor: Color.fromARGB(255, 111, 96, 246),
         titleStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 35,
@@ -103,7 +104,12 @@ class LoginScreen extends StatelessWidget {
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushNamed(NamedRoutes.navigationScreen);
+        if (users.isEmpty) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => AddUserInfo()));
+        } else {
+          Navigator.of(context).pushNamed(NamedRoutes.navigationScreen);
+        }
       },
       onRecoverPassword: _recoverPassword,
     );

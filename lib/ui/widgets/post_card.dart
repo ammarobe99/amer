@@ -74,16 +74,20 @@ class PostCard extends StatelessWidget {
                         children: [
                           FilledButton(
                             onPressed: () async {
-                              final ScaffoldMessengerState scaffoldMessengerState =
+                              final ScaffoldMessengerState
+                                  scaffoldMessengerState =
                                   ScaffoldMessenger.of(context);
-                              final NavigatorState navigatorState = Navigator.of(context);
+                              final NavigatorState navigatorState =
+                                  Navigator.of(context);
                               try {
-                                await launchUrl(Uri.parse('tel:${postModel.phoneNumber}'));
+                                await launchUrl(
+                                    Uri.parse('tel:${postModel.phoneNumber}'));
                               } catch (e) {
                                 navigatorState.pop();
                                 scaffoldMessengerState.showSnackBar(
                                   const SnackBar(
-                                    content: Text('Something went wrong, try again!'),
+                                    content: Text(
+                                        'Something went wrong, try again!'),
                                   ),
                                 );
                               }
@@ -92,9 +96,11 @@ class PostCard extends StatelessWidget {
                           ),
                           FilledButton(
                             onPressed: () async {
-                              final ScaffoldMessengerState scaffoldMessengerState =
+                              final ScaffoldMessengerState
+                                  scaffoldMessengerState =
                                   ScaffoldMessenger.of(context);
-                              final NavigatorState navigatorState = Navigator.of(context);
+                              final NavigatorState navigatorState =
+                                  Navigator.of(context);
                               try {
                                 final WhatsAppUnilink link = WhatsAppUnilink(
                                   phoneNumber: postModel.phoneNumber,
@@ -104,7 +110,8 @@ class PostCard extends StatelessWidget {
                                 navigatorState.pop();
                                 scaffoldMessengerState.showSnackBar(
                                   const SnackBar(
-                                    content: Text('Something went wrong, try again!'),
+                                    content: Text(
+                                        'Something went wrong, try again!'),
                                   ),
                                 );
                               }

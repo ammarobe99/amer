@@ -7,6 +7,8 @@ import 'package:loading_plus/loading_plus.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:tamwelkom/data/post_model.dart';
 
+import 'financing_information_page.dart';
+
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
     super.key,
@@ -29,6 +31,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
       appBar: AppBar(
         title: const Text('Details'),
         backgroundColor: const Color.fromARGB(255, 243, 240, 249),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) {
+                    return FinancingInformationPage(
+                      postId: widget.postModel.id!,
+                    );
+                  },
+                ),
+              );
+            },
+            child: const Text('Financing information'),
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance

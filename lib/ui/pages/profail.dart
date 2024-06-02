@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:tamwelkom/data/infoUser.dart';
-import 'package:tamwelkom/data/post_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:tamwelkom/app/configs/colors.dart';
-import 'package:tamwelkom/data/message_model.dart';
-import 'package:tamwelkom/ui/pages/chat_page.dart';
-
-import '../../data/post_model.dart';
-import '../widgets/post_card.dart';
+import 'package:tamwelkom/data/info_user.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  Future<infoUser> fetchUserInfo() async {
-    // Assuming you have a 'users' collection where user data is stored
-    User? currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      DocumentSnapshot doc =
-          await FirebaseFirestore.instance.collection('userInfo').doc().get();
-
-      if (doc.exists) {
-        // Create an instance of infoUser from the fetched data
-        return infoUser.fromDocument(doc);
-      }
-    }
-    // Return a default user info or handle accordingly if no user is found
-    return infoUser(username: 'Guest', email: 'guest@example.com');
-  }
+  // Future<infoUser> fetchUserInfo() async {
+  //   // Assuming you have a 'users' collection where user data is stored
+  //   User? currentUser = FirebaseAuth.instance.currentUser;
+  //   if (currentUser != null) {
+  //     DocumentSnapshot doc =
+  //         await FirebaseFirestore.instance.collection('userInfo').doc().get();
+  //
+  //     if (doc.exists) {
+  //       // Create an instance of infoUser from the fetched data
+  //       return infoUser.fromDocument(doc);
+  //     }
+  //   }
+  //   // Return a default user info or handle accordingly if no user is found
+  //   return infoUser(username: 'Guest', email: 'guest@example.com');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +31,31 @@ class ProfileScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: FutureBuilder<infoUser>(
-          future: fetchUserInfo(),
+        child: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          // future: fetchUserInfo(),
+          future: FirebaseFirestore.instance
+              .collection('userInfo')
+              .where(
+                'userId',
+                isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+              )
+              .get(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data == null) {
-              return Center(child: Text('User data not found'));
+              return const Center(child: Text('User data not found'));
             } else {
-              infoUser userInfo = snapshot.data!;
+              InfoUser userInfo = InfoUser.fromJson(
+                snapshot.data!.docs.first.data(),
+                snapshot.data!.docs.first.id,
+              );
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
+                  const Center(
                     child: CircleAvatar(
                       radius: 50,
                       backgroundImage: AssetImage('assets/images/student.png'),
@@ -74,27 +76,27 @@ class ProfileScreen extends StatelessWidget {
                   ProfileDetail(
                     icon: Icons.person,
                     label: 'Name',
-                    value: userInfo.username ?? '',
+                    value: '${userInfo.username}',
                   ),
                   ProfileDetail(
-                    icon: Icons.email,
+                    icon: Icons.numbers,
                     label: 'Age',
-                    value: "18" ?? '',
+                    value: '${userInfo.age}',
                   ),
                   ProfileDetail(
-                    icon: Icons.email,
-                    label: 'Email',
-                    value: userInfo.email ?? '',
+                    icon: Icons.phone,
+                    label: 'Phone',
+                    value: '${userInfo.phoneNumber}',
                   ),
                   ProfileDetail(
-                    icon: Icons.email,
-                    label: 'Email',
-                    value: userInfo.email ?? '',
+                    icon: Icons.location_on,
+                    label: 'Phone',
+                    value: '${userInfo.location}',
                   ),
                   ProfileDetail(
-                    icon: Icons.email,
-                    label: 'Email',
-                    value: userInfo.email ?? '',
+                    icon: Icons.star,
+                    label: 'Role',
+                    value: '${userInfo.role}',
                   ),
                   // Add other profile details as needed
                 ],
@@ -156,16 +158,16 @@ class ProfileDetail extends StatelessWidget {
   }
 }
 
-class infoUser {
-  final String? username;
-  final String? email;
-
-  infoUser({this.username, this.email});
-
-  factory infoUser.fromDocument(DocumentSnapshot doc) {
-    return infoUser(
-      username: doc['username'],
-      email: doc['email'],
-    );
-  }
-}
+// class infoUser {
+//   final String? username;
+//   final String? email;
+//
+//   infoUser({this.username, this.email});
+//
+//   factory infoUser.fromDocument(DocumentSnapshot doc) {
+//     return infoUser(
+//       username: doc['username'],
+//       email: doc['email'],
+//     );
+//   }
+// }

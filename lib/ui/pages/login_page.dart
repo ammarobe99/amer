@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
-import 'package:tamwelkom/ui/pages/add_userDetils.dart';
+import 'package:tamwelkom/ui/pages/add_user_detils.dart';
 import '../../app/resources/constant/named_routes.dart';
-import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -10,6 +9,9 @@ const Map<String, String> users = {
   'dribbble@gmail.com': '12345',
   'hunter@gmail.com': 'hunter',
 };
+
+bool isLogin = false;
+bool isSignUp = false;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -28,6 +30,7 @@ class LoginScreen extends StatelessWidget {
         email: data.name,
         password: data.password,
       );
+      isLogin = true;
     } on FirebaseAuthException catch (e) {
       // WRONG EMAIL
       if (e.code == 'user-not-found') {
@@ -66,7 +69,7 @@ class LoginScreen extends StatelessWidget {
           "email": data.name!,
         },
       );
-
+      isSignUp = true;
       debugPrint('Signup successful: ${data.name}');
       return null;
     } on FirebaseAuthException catch (e) {
@@ -93,7 +96,7 @@ class LoginScreen extends StatelessWidget {
     return FlutterLogin(
       theme: LoginTheme(
         cardTopPosition: 250,
-        primaryColor: Color.fromARGB(255, 111, 96, 246),
+        primaryColor: const Color.fromARGB(255, 111, 96, 246),
         titleStyle: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 35,
@@ -104,9 +107,16 @@ class LoginScreen extends StatelessWidget {
       onLogin: _authUser,
       onSignup: _signupUser,
       onSubmitAnimationCompleted: () {
-        if (users.isEmpty) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => AddUserInfo()));
+        // Navigator.of(context)
+        //     .push(MaterialPageRoute(builder: (_) => AddUserInfo()));
+        // return;
+
+        if (isSignUp) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const AddUserInfo(),
+            ),
+          );
         } else {
           Navigator.of(context).pushNamed(NamedRoutes.navigationScreen);
         }

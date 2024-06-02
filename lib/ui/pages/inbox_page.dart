@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
-import 'package:tamwelkom/data/message_model.dart';
-import 'package:tamwelkom/ui/pages/chat_page.dart';
 
 import '../../data/post_model.dart';
 import '../widgets/post_card.dart';

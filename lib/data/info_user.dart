@@ -1,33 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class infoUser {
+class InfoUser {
+  String? id;
   String? role;
   String? age;
   String? location;
-  String? budget;
-  DateTime? dateTime;
   String? userId;
   String? phoneNumber;
   String? username;
 
-  infoUser({
+  InfoUser({
+    this.id,
     this.role,
     this.age,
     this.location,
-    this.budget,
-    this.dateTime,
     this.userId,
     this.phoneNumber,
     this.username,
   });
 
-  factory infoUser.fromJson(Map<String, dynamic> json, String id) {
-    return infoUser(
-      role: id,
+  factory InfoUser.fromJson(Map<String, dynamic> json, String id) {
+    return InfoUser(
+      id: id,
+      role: json['role'],
       age: json['age'],
       location: json['location'],
-      budget: json['budget'],
-      dateTime: (json['dateTime'] as Timestamp).toDate(),
       userId: json['userId'],
       phoneNumber: json['phoneNumber'],
       username: json['username'],
@@ -39,8 +34,6 @@ class infoUser {
       'role': role,
       'age': age,
       'location': location,
-      'budget': budget,
-      'dateTime': DateTime.timestamp(),
       'userId': userId,
       'phoneNumber': phoneNumber,
       'username': username,

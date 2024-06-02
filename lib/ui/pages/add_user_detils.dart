@@ -2,13 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:loading_plus/loading_plus.dart';
 import 'package:tamwelkom/app/configs/colors.dart';
 import 'package:tamwelkom/app/resources/constant/named_routes.dart';
-import 'package:tamwelkom/data/infoUser.dart';
-import 'package:tamwelkom/data/post_model.dart';
-import 'package:tamwelkom/ui/pages/home_page.dart';
+import 'package:tamwelkom/data/info_user.dart';
 import '../../app/configs/theme.dart';
 
 class AddUserInfo extends StatefulWidget {
@@ -67,6 +64,7 @@ class _HomeState extends State<AddUserInfo> {
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  bool isFinancier = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,19 +132,19 @@ class _HomeState extends State<AddUserInfo> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16.0),
-              CustomTextField(
-                controller: budgetController,
-                label: 'Budget',
-                textInputAction: TextInputAction.next,
-                textInputType: TextInputType.number,
-                validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Budget required';
-                  }
-                  return null;
-                },
-              ),
+              // const SizedBox(height: 16.0),
+              // CustomTextField(
+              //   controller: budgetController,
+              //   label: 'Budget',
+              //   textInputAction: TextInputAction.next,
+              //   textInputType: TextInputType.number,
+              //   validator: (String? value) {
+              //     if (value == null || value.isEmpty) {
+              //       return 'Budget required';
+              //     }
+              //     return null;
+              //   },
+              // ),
               const SizedBox(height: 16.0),
               CustomTextField(
                 controller: phoneNumberController,
@@ -161,37 +159,56 @@ class _HomeState extends State<AddUserInfo> {
                 },
               ),
               const SizedBox(height: 16.0),
-              InkWell(
-                onTap: () async {
-                  final DateTime? dateTime = await showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now().add(const Duration(days: 365)),
-                  );
-                  if (dateTime == null) return;
-                  expiryDateController.text =
-                      DateFormat('dd/MM/yyyy').format(dateTime);
-                  expiryDate = dateTime;
+
+              RadioListTile(
+                value: false,
+                title: const Text('Normal User'),
+                groupValue: isFinancier,
+                onChanged: (_) {
+                  isFinancier = false;
+                  setState(() {});
                 },
-                child: CustomTextField(
-                  controller: expiryDateController,
-                  label: 'Expiry Date',
-                  readOnly: true,
-                  ignorePointers: true,
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Expiry Date required';
-                    }
-                    return null;
-                  },
-                ),
               ),
+              RadioListTile(
+                value: true,
+                title: const Text('Financier'),
+                groupValue: isFinancier,
+                onChanged: (_) {
+                  isFinancier = true;
+                  setState(() {});
+                },
+              ),
+              // InkWell(
+              //   onTap: () async {
+              //     final DateTime? dateTime = await showDatePicker(
+              //       context: context,
+              //       firstDate: DateTime.now(),
+              //       lastDate: DateTime.now().add(const Duration(days: 365)),
+              //     );
+              //     if (dateTime == null) return;
+              //     expiryDateController.text =
+              //         DateFormat('dd/MM/yyyy').format(dateTime);
+              //     expiryDate = dateTime;
+              //   },
+              //   child: CustomTextField(
+              //     controller: expiryDateController,
+              //     label: 'Expiry Date',
+              //     readOnly: true,
+              //     ignorePointers: true,
+              //     validator: (String? value) {
+              //       if (value == null || value.isEmpty) {
+              //         return 'Expiry Date required';
+              //       }
+              //       return null;
+              //     },
+              //   ),
+              // ),
               const SizedBox(height: 32.0),
               FilledButton(
                 onPressed: () {
                   // if (!formKey.currentState!.validate()) return;
 
-        Navigator.of(context).pushNamed(NamedRoutes.navigationScreen);
+                  Navigator.of(context).pushNamed(NamedRoutes.navigationScreen);
 
                   submitInfo();
                 },
@@ -205,18 +222,17 @@ class _HomeState extends State<AddUserInfo> {
   }
 
   Future<void> submitInfo() async {
+    if (!formKey.currentState!.validate()) return;
     final ScaffoldMessengerState scaffoldMessengerState =
         ScaffoldMessenger.of(context);
-    final NavigatorState navigatorState = Navigator.of(context);
     try {
-      final infoUser infouser = infoUser(
+      final InfoUser infouser = InfoUser(
         username: yourNameController.text.trim(),
         age: titleController.text.trim(),
         location: locationController.text.trim(),
-        budget: budgetController.text.trim(),
-        dateTime: expiryDate,
         userId: FirebaseAuth.instance.currentUser!.uid,
         phoneNumber: phoneNumberController.text.trim(),
+        role: isFinancier ? 'Financier' : 'User',
       );
 
       LoadingPlusController().show();
